@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>wolf2w-common-core</module>
+        <module>wolf2w-common-redis</module>
     </modules>
 
 
