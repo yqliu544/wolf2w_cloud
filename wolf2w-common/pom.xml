@@ -14,6 +14,7 @@
     <modules>
         <module>wolf2w-common-core</module>
         <module>wolf2w-common-redis</module>
+        <module>wolf2w-common-auth</module>
     </modules>
 
 

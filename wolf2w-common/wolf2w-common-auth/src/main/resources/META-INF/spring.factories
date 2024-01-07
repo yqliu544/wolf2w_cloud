@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.wolfcode.wolf2w.auth.config.Wolf2wJwtAutoConfiguration

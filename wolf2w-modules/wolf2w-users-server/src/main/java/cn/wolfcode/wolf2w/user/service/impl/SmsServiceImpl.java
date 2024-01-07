@@ -1,6 +1,9 @@
 package cn.wolfcode.wolf2w.user.service.impl;
 
+import cn.wolfcode.wolf2w.redis.core.exception.BusinessException;
+import cn.wolfcode.wolf2w.redis.core.utils.R;
 import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
+import cn.wolfcode.wolf2w.user.redis.key.UserRedisKeyPrefix;
 import cn.wolfcode.wolf2w.user.service.SmsService;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
@@ -31,18 +34,15 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void registerSmsSend(String phone) {
         String code = this.generateVerifyCode("MATH", 6);
-        System.out.println(phone);
-        System.out.println(phone);
-        System.out.println(phone);
-        System.out.println(phone);
         try {
             this.send("18435681151",code);
-        }catch (RuntimeException re){
+        }catch (BusinessException re){
             throw re;
         }catch (Exception e) {
             e.printStackTrace();
         }
-        redisCache.setCacheObject("USERS:REGISTER:VERIFY_CODE:"+phone,code, 30L, TimeUnit.MINUTES);
+        UserRedisKeyPrefix keyPrefix = UserRedisKeyPrefix.USER_REGISTER_VERIFY_CODE_STRING;
+        redisCache.setCacheObject(keyPrefix.fullKey(phone),code, keyPrefix.getTimeout(),keyPrefix.getUnit());
     }
 
     private void send(String phone,String code) throws Exception {
@@ -58,7 +58,7 @@ public class SmsServiceImpl implements SmsService {
         SendSmsResponseBody body = response.getBody();
         log.info("[短信服务]阿里云发送短信相应结果{}",body);
         if (!"ok".equalsIgnoreCase(body.code)){
-            throw new RuntimeException(body.message);
+            throw new BusinessException(R.CODE_SMS_ERROR,body.message);
         }
 
     }

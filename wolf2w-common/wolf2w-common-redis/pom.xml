@@ -17,8 +17,9 @@
            <artifactId>spring-boot-starter-data-redis</artifactId>
        </dependency>
        <dependency>
-           <groupId>org.projectlombok</groupId>
-           <artifactId>lombok</artifactId>
+           <groupId>cn.wolfcode.wolf2w</groupId>
+           <artifactId>wolf2w-common-core</artifactId>
+           <version>1.0.0</version>
        </dependency>
    </dependencies>
 

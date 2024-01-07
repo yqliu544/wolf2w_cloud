@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>cn.wolfcode.wolf2w</groupId>
-            <artifactId>wolf2w-common-redis</artifactId>
+            <artifactId>wolf2w-common-auth</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

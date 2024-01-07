@@ -21,6 +21,11 @@
            <artifactId>mybatis-plus-boot-starter</artifactId>
            <!--<scope>provided</scope>-->
        </dependency>
+       <dependency>
+           <groupId>cn.wolfcode.wolf2w</groupId>
+           <artifactId>wolf2w-common-redis</artifactId>
+           <version>1.0.0</version>
+       </dependency>
    </dependencies>
 
 </project>
