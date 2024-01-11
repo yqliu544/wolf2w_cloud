@@ -3,33 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wolf2w-modules</artifactId>
+        <artifactId>wolf2w-modules-api</artifactId>
         <groupId>cn.wolfcode.wolf2w</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wolf2w-users-server</artifactId>
+    <artifactId>wolf2w-article-api</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>cn.wolfcode.wolf2w</groupId>
-            <artifactId>wolf2w-users-api</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>cn.wolfcode.wolf2w</groupId>
-            <artifactId>wolf2w-common-auth</artifactId>
+            <artifactId>wolf2w-common-redis</artifactId>
             <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>dysmsapi20170525</artifactId>
-            <version>2.0.24</version>
         </dependency>
     </dependencies>
 

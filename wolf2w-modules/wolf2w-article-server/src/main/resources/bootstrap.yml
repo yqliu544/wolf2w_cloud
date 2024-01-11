@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-service
+    name: article-service
   cloud:
     nacos:
       config:
