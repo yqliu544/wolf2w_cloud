@@ -14,7 +14,7 @@
     </resultMap>
     <select id="selectHotListByRid" resultMap="FullResultMap">
         select province.id,province.name,city.id c_id,city.name c_name
-        from destination province join destination city on city.parent_id=province.id
+        from destination province left join destination city on city.parent_id=province.id
         <where>
           <if test="rid==-1">
               province.parent_id=1
