@@ -2,6 +2,7 @@ package cn.wolfcode.wolf2w.article.controller;
 
 import cn.wolfcode.wolf2w.article.domain.Destination;
 import cn.wolfcode.wolf2w.article.domain.Region;
+import cn.wolfcode.wolf2w.article.qo.DestinationQuery;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
@@ -23,8 +24,8 @@ public class DestinationController {
     private DestinationService destinationService;
 
     @GetMapping
-    public R<Page<Destination>> pageList(Page<Destination> page){
-        Page<Destination> resultPage = destinationService.page(page);
+    public R<Page<Destination>> pageList(DestinationQuery quary){
+        Page<Destination> resultPage = destinationService.pageList(quary);
         return R.ok(resultPage);
     }
 
@@ -57,4 +58,16 @@ public class DestinationController {
         destinationService.removeById(id);
         return R.ok();
     }
+
+    @GetMapping("/toasts")
+    public R<List<Destination>> toasts(Long destId){
+        return R.ok(destinationService.findToasts(destId));
+    }
+
+    @GetMapping("/hotList")
+    public R<List<Destination>> hotList(Long rid){
+        return R.ok(destinationService.findDestByRid(rid));
+    }
+
+
 }
