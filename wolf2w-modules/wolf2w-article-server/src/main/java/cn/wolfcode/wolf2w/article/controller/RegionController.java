@@ -30,7 +30,7 @@ public class RegionController {
         Page<Region> resultPage = regionService.page(page);
         return R.ok(resultPage);
     }
-    @RequireLogin
+
     @GetMapping("/detail")
     public R<Region> getById(Long id){
         return R.ok(regionService.getById(id));

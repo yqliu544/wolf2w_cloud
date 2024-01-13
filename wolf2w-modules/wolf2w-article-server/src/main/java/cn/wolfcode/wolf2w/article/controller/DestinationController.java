@@ -34,7 +34,7 @@ public class DestinationController {
         return R.ok(destinationService.list());
     }
 
-    @RequireLogin
+
     @GetMapping("/detail")
     public R<Destination> getById(Long id){
         return R.ok(destinationService.getById(id));

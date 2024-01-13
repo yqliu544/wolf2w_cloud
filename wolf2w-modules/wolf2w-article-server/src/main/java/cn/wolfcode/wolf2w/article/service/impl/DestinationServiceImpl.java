@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class DestinationServiceImpl extends ServiceImpl<DestinationMapper, Desti
 
     @Autowired
     private RegionService regionService;
+
+    @Autowired
+    private ThreadPoolExecutor  threadPoolExecutor;
 
     @Override
     public List<Destination> getDestinationByRegionId(Long id) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.wolf2w.article.mapper.StrategyCatalogMapper">
+    
+    <resultMap id="BaseResultMap" type="cn.wolfcode.wolf2w.article.domain.StrategyCatalog">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result property="destId" column="dest_id"/>
+        <result property="destName" column="dest_name"/>
+        <result property="seq" column="seq"/>
+        <result property="state" column="state"/>
+    </resultMap>
+    <resultMap id="CatalogGroupMap" type="cn.wolfcode.wolf2w.article.vo.StrategyCatalogGroup">
+        <id property="destId" column="dest_id"/>
+        <result column="dest_name" property="destName"/>
+        <collection property="catalogList" columnPrefix="sc_" resultMap="BaseResultMap"/>
+    </resultMap>
+    
+    <select id="selectGroupList" resultMap="CatalogGroupMap">
+        select t.dest_id,t.dest_name,sc.id sc_id,sc.name sc_name,sc.seq sc_seq,sc.state sc_state
+        from (select dest_id,dest_name from strategy_catalog group by dest_id,dest_name) t
+            join strategy_catalog sc on t.dest_id=sc.dest_id where sc.state=0
+    </select>
+</mapper>
