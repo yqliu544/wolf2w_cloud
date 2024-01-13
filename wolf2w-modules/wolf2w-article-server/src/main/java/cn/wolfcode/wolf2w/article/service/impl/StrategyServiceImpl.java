@@ -4,11 +4,14 @@ import cn.wolfcode.wolf2w.article.domain.*;
 import cn.wolfcode.wolf2w.article.mapper.StrategyContentMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyThemeMapper;
+import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.article.service.StrategyCatalogService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.service.StrategyThemeService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +93,33 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
         int row = strategyContentMapper.updateById(entity.getContent());
         return row >0 && b;
 
+    }
+
+    @Override
+    public List<StrategyCatalog> findGroupsByDestId(Long destId) {
+
+        return getBaseMapper().selectGroupsByDestId(destId);
+    }
+
+    @Override
+    public StrategyContent getContentById(Long id) {
+        return strategyContentMapper.selectById(id);
+    }
+
+    @Override
+    public List<Strategy> findViewnumTop3ByDestId(Long destId) {
+        QueryWrapper<Strategy> wrapper = new QueryWrapper<Strategy>()
+                .eq("dest_id", destId)
+                .orderByDesc("viewnum")
+                .last("limit 3");
+        return list(wrapper);
+    }
+
+    @Override
+    public Page<Strategy> pageList(StrategyQuery query) {
+        QueryWrapper<Strategy> wrapper = new QueryWrapper<Strategy>()
+                .eq(query.getDestId()!=null,"dest_id",query.getDestId())
+                .eq(query.getThemeId()!=null,"theme_id",query.getThemeId());
+        return super.page(new Page<>(query.getCurrent(),query.getSize()),wrapper);
     }
 }

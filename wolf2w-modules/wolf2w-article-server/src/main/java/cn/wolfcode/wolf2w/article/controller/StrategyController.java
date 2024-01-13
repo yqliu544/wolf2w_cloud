@@ -1,6 +1,9 @@
 package cn.wolfcode.wolf2w.article.controller;
 
 import cn.wolfcode.wolf2w.article.domain.Strategy;
+import cn.wolfcode.wolf2w.article.domain.StrategyCatalog;
+import cn.wolfcode.wolf2w.article.domain.StrategyContent;
+import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
@@ -10,6 +13,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -24,8 +29,8 @@ public class StrategyController {
 
 
     @GetMapping("/query")
-    public R<Page<Strategy>> pageList(Page<Strategy> page){
-        Page<Strategy> resultPage = strategyService.page(page);
+    public R<Page<Strategy>> pageList(StrategyQuery query){
+        Page<Strategy> resultPage = strategyService.pageList(query);
         return R.ok(resultPage);
     }
 
@@ -34,6 +39,10 @@ public class StrategyController {
         return R.ok(strategyService.getById(id));
     }
 
+    @GetMapping("/content")
+    public R<StrategyContent> getContentById(Long id){
+        return R.ok(strategyService.getContentById(id));
+    }
 
 
     @PostMapping("/save")
@@ -70,6 +79,17 @@ public class StrategyController {
         result.put("fileName",upload.getOriginalFilename());
         result.put("url",url);
         return result;
+    }
+
+
+    @GetMapping("/groups")
+    public R<List<StrategyCatalog>> groupByCatalog(Long destId){
+        return R.ok(strategyService.findGroupsByDestId(destId));
+    }
+
+    @GetMapping("/viewnumTop3")
+    public R<List<Strategy>> viewnumTop3(Long destId){
+        return R.ok(strategyService.findViewnumTop3ByDestId(destId));
     }
 
 }
