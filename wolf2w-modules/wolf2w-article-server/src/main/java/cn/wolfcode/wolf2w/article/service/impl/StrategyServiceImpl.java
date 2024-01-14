@@ -10,6 +10,7 @@ import cn.wolfcode.wolf2w.article.service.StrategyCatalogService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.service.StrategyThemeService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
+import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -117,9 +118,27 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
 
     @Override
     public Page<Strategy> pageList(StrategyQuery query) {
+        if ((query.getType()!=null && query.getType() !=-1)&& (query.getRefid()!=null && query.getRefid()!=-1)){
+            if (query.getType()==3){
+                query.setThemeId(query.getRefid());
+            }else {
+                query.setDestId(query.getRefid());
+            }
+        }
         QueryWrapper<Strategy> wrapper = new QueryWrapper<Strategy>()
                 .eq(query.getDestId()!=null,"dest_id",query.getDestId())
-                .eq(query.getThemeId()!=null,"theme_id",query.getThemeId());
+                .eq(query.getThemeId()!=null,"theme_id",query.getThemeId())
+                .orderByDesc(!StringUtils.isEmpty(query.getOrderBy()),query.getOrderBy());
         return super.page(new Page<>(query.getCurrent(),query.getSize()),wrapper);
+    }
+
+    @Override
+    public List<StrategyCondition> findDestCondition(int abroadNo) {
+        return getBaseMapper().selectDestCondition(abroadNo);
+    }
+
+    @Override
+    public List<StrategyCondition> findThemeCondition() {
+        return getBaseMapper().selectThemeCondition();
     }
 }

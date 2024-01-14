@@ -4,6 +4,7 @@ import cn.wolfcode.wolf2w.article.domain.Strategy;
 import cn.wolfcode.wolf2w.article.domain.StrategyCatalog;
 import cn.wolfcode.wolf2w.article.domain.StrategyContent;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
+import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,4 +24,9 @@ public interface StrategyService extends IService<Strategy> {
     List<Strategy> findViewnumTop3ByDestId(Long destId);
 
     Page<Strategy> pageList(StrategyQuery query);
+
+    List<StrategyCondition> findDestCondition(int abroadNo);
+
+    List<StrategyCondition> findThemeCondition();
+
 }

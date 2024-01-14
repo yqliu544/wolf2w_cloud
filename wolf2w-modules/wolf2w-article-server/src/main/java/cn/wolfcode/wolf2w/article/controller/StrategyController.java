@@ -6,6 +6,7 @@ import cn.wolfcode.wolf2w.article.domain.StrategyContent;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
+import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
 import com.alibaba.fastjson2.JSONObject;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:
@@ -42,6 +45,18 @@ public class StrategyController {
     @GetMapping("/content")
     public R<StrategyContent> getContentById(Long id){
         return R.ok(strategyService.getContentById(id));
+    }
+
+    @GetMapping("/conditions")
+    public R<Map<String,List<StrategyCondition>>> getConditions(){
+        HashMap<String, List<StrategyCondition>> map = new HashMap<>();
+        List<StrategyCondition> chinaCondition=strategyService.findDestCondition(Strategy.ABROAD_NO);
+        map.put("chinaCondition",chinaCondition);
+        List<StrategyCondition> abroadCondition=strategyService.findDestCondition(Strategy.ABROAD_YES);
+        map.put("abroadCondition",abroadCondition);
+        List<StrategyCondition> themeCondition=strategyService.findThemeCondition();
+        map.put("themeCondition",themeCondition);
+        return R.ok(map);
     }
 
 

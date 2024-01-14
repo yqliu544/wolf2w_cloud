@@ -14,6 +14,7 @@
     <modules>
         <module>wolf2w-users-server</module>
         <module>wolf2w-article-server</module>
+        <module>wolf2w-data-server</module>
     </modules>
 
     <dependencies>

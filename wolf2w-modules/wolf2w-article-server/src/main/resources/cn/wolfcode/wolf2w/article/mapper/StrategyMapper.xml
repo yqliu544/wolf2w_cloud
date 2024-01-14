@@ -19,4 +19,16 @@
         from (select catalog_id,catalog_name from strategy where dest_id=#{destId} group by catalog_id, catalog_name) t
         join strategy s on t.catalog_id=s.catalog_id
     </select>
+    <select id="selectDestCondition" resultType="cn.wolfcode.wolf2w.article.vo.StrategyCondition">
+        select  dest_id refid,dest_name name,count(*) total
+        from strategy where isabroad=#{aborad}
+        group by dest_id, dest_name
+        order by total desc
+    </select>
+    <select id="selectThemeCondition" resultType="cn.wolfcode.wolf2w.article.vo.StrategyCondition">
+        select  theme_id refid,theme_name name,count(*) total
+        from strategy
+        group by theme_id, theme_name
+        order by total desc
+    </select>
 </mapper>
