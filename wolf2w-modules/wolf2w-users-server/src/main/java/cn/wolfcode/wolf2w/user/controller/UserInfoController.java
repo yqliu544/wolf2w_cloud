@@ -1,6 +1,7 @@
 package cn.wolfcode.wolf2w.user.controller;
 
 import cn.wolfcode.wolf2w.redis.core.utils.R;
+import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import cn.wolfcode.wolf2w.user.service.UserInfoService;
 import cn.wolfcode.wolf2w.user.domain.UserInfo;
 import cn.wolfcode.wolf2w.user.vo.RegisterRequest;
@@ -40,5 +41,11 @@ public class UserInfoController {
     public R<Map<String,Object>> login(String username,String password){
         Map<String,Object> map=userInfoService.login(username,password);
         return R.ok(map);
+    }
+
+    @GetMapping("/getById")
+    public R<UserInfoDTO> getById(Long id){
+        UserInfoDTO userInfo = userInfoService.getDtoById(id);
+        return R.ok(userInfo);
     }
 }

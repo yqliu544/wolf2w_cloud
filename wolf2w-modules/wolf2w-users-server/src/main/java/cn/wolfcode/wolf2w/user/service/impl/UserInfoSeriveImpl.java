@@ -5,6 +5,7 @@ import cn.wolfcode.wolf2w.redis.core.exception.BusinessException;
 import cn.wolfcode.wolf2w.redis.core.utils.Md5Utils;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
 import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
+import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import cn.wolfcode.wolf2w.user.mapper.UserInfoMapper;
 import cn.wolfcode.wolf2w.user.redis.key.UserRedisKeyPrefix;
 import cn.wolfcode.wolf2w.user.service.UserInfoService;
@@ -83,6 +84,17 @@ public class UserInfoSeriveImpl extends ServiceImpl<UserInfoMapper, UserInfo> im
         redisCache.setCacheObject(userLoginInfoString,loginUser,uuid);
 
         return payload;
+    }
+
+    @Override
+    public UserInfoDTO getDtoById(Long id) {
+        UserInfo userInfo = super.getById(id);
+        if (userInfo!=null){
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            BeanUtils.copyProperties(userInfo,userInfoDTO);
+            return userInfoDTO;
+        }
+        return null;
     }
 
     private UserInfo buildUserInfo(RegisterRequest registerRequest) {
