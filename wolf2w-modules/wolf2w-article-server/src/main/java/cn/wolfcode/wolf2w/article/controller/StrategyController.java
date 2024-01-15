@@ -3,7 +3,9 @@ package cn.wolfcode.wolf2w.article.controller;
 import cn.wolfcode.wolf2w.article.domain.Strategy;
 import cn.wolfcode.wolf2w.article.domain.StrategyCatalog;
 import cn.wolfcode.wolf2w.article.domain.StrategyContent;
+import cn.wolfcode.wolf2w.article.domain.StrategyRank;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
+import cn.wolfcode.wolf2w.article.service.StrategyRankService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
 import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
@@ -29,6 +31,8 @@ import java.util.Map;
 public class StrategyController {
     @Autowired
     private StrategyService strategyService;
+    @Autowired
+    private StrategyRankService strategyRankService;
 
 
     @GetMapping("/query")
@@ -107,4 +111,15 @@ public class StrategyController {
         return R.ok(strategyService.findViewnumTop3ByDestId(destId));
     }
 
+    @GetMapping("/ranks")
+    public R<JSONObject> findRanks(){
+        List<StrategyRank> abroadRank=strategyRankService.selectLastRanksByType(StrategyRank.TYPE_ABROAD);
+        List<StrategyRank> chinaRank=strategyRankService.selectLastRanksByType(StrategyRank.TYPE_CHINA);
+        List<StrategyRank> hotRank=strategyRankService.selectLastRanksByType(StrategyRank.TYPE_HOT);
+        JSONObject result = new JSONObject();
+        result.put("abroadRank",abroadRank);
+        result.put("chinaRank",chinaRank);
+        result.put("hotRank",hotRank);
+        return R.ok(result);
+    }
 }

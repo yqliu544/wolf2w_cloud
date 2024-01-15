@@ -1,5 +1,6 @@
 package cn.wolfcode.wolf2w.redis.core.utils;
 
+import cn.wolfcode.wolf2w.redis.core.exception.BusinessException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -68,4 +69,10 @@ public class R<T> {
     }
 
 
+    public T getAndCheck() {
+        if (code!=CODE_SUCCESS){
+            throw new BusinessException(code,msg);
+        }
+        return data;
+    }
 }

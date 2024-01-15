@@ -1,6 +1,7 @@
 package cn.wolfcode.wolf2w.auth.config;
 
 import cn.wolfcode.wolf2w.auth.interceptor.LoginInterceptor;
+import cn.wolfcode.wolf2w.auth.util.SpringContextUtil;
 import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,4 +17,8 @@ public class Wolf2wJwtAutoConfiguration {
         return new LoginInterceptor(redisCache,jwtProperties);
     }
 
+    @Bean
+    public SpringContextUtil springContextUtil(){
+        return new SpringContextUtil();
+    }
 }
