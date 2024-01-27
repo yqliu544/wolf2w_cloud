@@ -1,16 +1,22 @@
 package cn.wolfcode.wolf2w.article.service.impl;
 
 import cn.wolfcode.wolf2w.article.domain.*;
+import cn.wolfcode.wolf2w.article.feign.UserInfoFeignService;
 import cn.wolfcode.wolf2w.article.mapper.StrategyContentMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyThemeMapper;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
+import cn.wolfcode.wolf2w.article.redis.key.StrategyRedisKeyPrefix;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.article.service.StrategyCatalogService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.service.StrategyThemeService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
 import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
+import cn.wolfcode.wolf2w.auth.util.AuthenticationUtils;
+import cn.wolfcode.wolf2w.redis.core.utils.R;
+import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
+import cn.wolfcode.wolf2w.user.vo.LoginUser;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,6 +40,10 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
     private StrategyThemeService strategyThemeService;
     @Autowired
     private StrategyContentMapper strategyContentMapper;
+    @Autowired
+    private RedisCache redisCache;
+    @Autowired
+    private UserInfoFeignService userInfoFeignService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -52,6 +62,12 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
         Strategy strategy = super.getById(id);
         StrategyContent content = strategyContentMapper.selectById(id);
         strategy.setContent(content);
+        LoginUser user = AuthenticationUtils.getUser();
+        if (user!=null){
+            R<List<Long>> favoriteStrategyList=userInfoFeignService.getFavorStrategyIdList(user.getId());
+            List<Long> list = favoriteStrategyList.getAndCheck();
+            strategy.setFavorite(list.contains(id));
+        }
         return strategy;
     }
 
@@ -140,5 +156,10 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
     @Override
     public List<StrategyCondition> findThemeCondition() {
         return getBaseMapper().selectThemeCondition();
+    }
+
+    @Override
+    public void viewnumIncr(Long id) {
+        redisCache.hashIncrement(StrategyRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP,"viewnum",1,id+"");
     }
 }

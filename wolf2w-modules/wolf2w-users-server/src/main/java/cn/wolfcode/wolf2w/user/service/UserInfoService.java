@@ -5,6 +5,7 @@ import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import cn.wolfcode.wolf2w.user.vo.RegisterRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserInfoService extends IService<UserInfo> {
@@ -16,4 +17,8 @@ public interface UserInfoService extends IService<UserInfo> {
     Map<String, Object> login(String username, String password);
 
     UserInfoDTO getDtoById(Long id);
+
+    List<Long> getFavorStrategyIdList(Long userId);
+
+    boolean favoriteStrategy(Long sid);
 }

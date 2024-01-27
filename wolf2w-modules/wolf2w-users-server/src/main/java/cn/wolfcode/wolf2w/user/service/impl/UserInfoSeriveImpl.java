@@ -1,6 +1,7 @@
 package cn.wolfcode.wolf2w.user.service.impl;
 
 import cn.wolfcode.wolf2w.auth.config.JwtProperties;
+import cn.wolfcode.wolf2w.auth.util.AuthenticationUtils;
 import cn.wolfcode.wolf2w.redis.core.exception.BusinessException;
 import cn.wolfcode.wolf2w.redis.core.utils.Md5Utils;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -95,6 +97,26 @@ public class UserInfoSeriveImpl extends ServiceImpl<UserInfoMapper, UserInfo> im
             return userInfoDTO;
         }
         return null;
+    }
+
+    @Override
+    public List<Long> getFavorStrategyIdList(Long userId) {
+        List<Long> list=getBaseMapper().selectFavorStrategyIdList(userId);
+        return list;
+    }
+
+    @Override
+    public boolean favoriteStrategy(Long sid) {
+        LoginUser user = AuthenticationUtils.getUser();
+        List<Long> list = this.getFavorStrategyIdList(user.getId());
+        if (list.contains(sid)) {
+            getBaseMapper().deleteFavorStrategy(user.getId(),sid);
+            redisCache.hashIncrement(UserRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP,"favornum",-1,sid+"");
+            return false;
+        }
+        getBaseMapper().insertFavorStrategy(user.getId(),sid);
+        redisCache.hashIncrement(UserRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP,"favornum",1,sid+"");
+        return true;
     }
 
     private UserInfo buildUserInfo(RegisterRequest registerRequest) {

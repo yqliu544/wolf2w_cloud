@@ -20,6 +20,7 @@ public class StrategyCommentController {
     @PostMapping("/save")
     public R<?> save(StrategyComment comment){
         strategyCommentService.save(comment);
+        strategyCommentService.replyNumIncr(comment.getStrategyId());
         return R.ok();
     }
 

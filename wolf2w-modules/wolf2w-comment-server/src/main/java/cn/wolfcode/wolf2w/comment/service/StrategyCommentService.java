@@ -12,4 +12,6 @@ public interface StrategyCommentService {
     void save(StrategyComment comment);
 
     void dolike(String cid);
+
+    void replyNumIncr(Long strategyId);
 }

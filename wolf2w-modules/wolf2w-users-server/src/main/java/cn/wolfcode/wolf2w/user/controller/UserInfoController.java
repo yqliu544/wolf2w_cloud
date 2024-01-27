@@ -1,15 +1,13 @@
 package cn.wolfcode.wolf2w.user.controller;
 
+import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
 import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import cn.wolfcode.wolf2w.user.service.UserInfoService;
 import cn.wolfcode.wolf2w.user.domain.UserInfo;
 import cn.wolfcode.wolf2w.user.vo.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -47,5 +45,17 @@ public class UserInfoController {
     public R<UserInfoDTO> getById(Long id){
         UserInfoDTO userInfo = userInfoService.getDtoById(id);
         return R.ok(userInfo);
+    }
+
+    @GetMapping("/favor/strategies")
+    public R<List<Long>> getFavorStrategyIdList(Long userId){
+        List<Long> list=userInfoService.getFavorStrategyIdList(userId);
+        return R.ok(list);
+    }
+    @RequireLogin
+    @PostMapping("/favor/strategies")
+    public R<Boolean> favoriteStrategy(Long sid){
+        boolean ret=userInfoService.favoriteStrategy(sid);
+        return  R.ok(ret);
     }
 }

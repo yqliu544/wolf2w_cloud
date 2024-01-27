@@ -3,8 +3,10 @@ package cn.wolfcode.wolf2w.comment.service.impl;
 import cn.wolfcode.wolf2w.auth.util.AuthenticationUtils;
 import cn.wolfcode.wolf2w.comment.domain.StrategyComment;
 import cn.wolfcode.wolf2w.comment.qo.CommentQuery;
+import cn.wolfcode.wolf2w.comment.redis.key.CommentRedisKeyPrefix;
 import cn.wolfcode.wolf2w.comment.repository.StrategyCommentRepository;
 import cn.wolfcode.wolf2w.comment.service.StrategyCommentService;
+import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
 import cn.wolfcode.wolf2w.user.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ import java.util.Optional;
 
 @Service
 public class StrategyCommentServiceImpl implements StrategyCommentService {
+    @Autowired
+    private RedisCache redisCache;
     @Autowired
     private StrategyCommentRepository strategyCommentRepository;
     @Autowired
@@ -72,5 +76,10 @@ public class StrategyCommentServiceImpl implements StrategyCommentService {
             }
             strategyCommentRepository.save(strategyComment);
         }
+    }
+
+    @Override
+    public void replyNumIncr(Long strategyId) {
+        redisCache.hashIncrement(CommentRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP,"replynum",1,strategyId+"");
     }
 }
