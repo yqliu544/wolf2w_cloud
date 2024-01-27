@@ -8,13 +8,13 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>wolf2w-article-server</artifactId>
-
+    
+    <artifactId>wolf2w-comment-server</artifactId>
+    
     <dependencies>
         <dependency>
             <groupId>cn.wolfcode.wolf2w</groupId>
-            <artifactId>wolf2w-article-api</artifactId>
+            <artifactId>wolf2w-comment-api</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
@@ -27,14 +27,6 @@
                     <artifactId>wolf2w-users-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
         </dependency>
     </dependencies>
 

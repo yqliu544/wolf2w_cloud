@@ -14,6 +14,7 @@
     <modules>
         <module>wolf2w-users-api</module>
         <module>wolf2w-article-api</module>
+        <module>wolf2w-comment-api</module>
     </modules>
     <dependencies>
         <dependency>

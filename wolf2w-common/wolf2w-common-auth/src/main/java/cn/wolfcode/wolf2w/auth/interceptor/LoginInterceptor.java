@@ -2,6 +2,7 @@ package cn.wolfcode.wolf2w.auth.interceptor;
 
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.auth.config.JwtProperties;
+import cn.wolfcode.wolf2w.auth.util.AuthenticationUtils;
 import cn.wolfcode.wolf2w.redis.core.exception.BusinessException;
 import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
 import cn.wolfcode.wolf2w.user.redis.key.UserRedisKeyPrefix;
@@ -71,7 +72,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+        AuthenticationUtils.removeUser();
     }
 
     @Override
