@@ -181,13 +181,16 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
         LoginUser user = AuthenticationUtils.getUser();
         StrategyRedisKeyPrefix keyPrefix = StrategyRedisKeyPrefix.STRATEGIES_TOP_MAP;
         String fullKey = keyPrefix.fullKey(sid + "");
-        Integer count = redisCache.getCacheMapValue(fullKey, user.getId() + "");
-        if (count!=null&&count>0){
-            return false;
-        }
+//        Integer count = redisCache.getCacheMapValue(fullKey, user.getId() + "");
+//        if (count!=null&&count>0){
+//            return false;
+//        }
         keyPrefix.setTimeout(DateUtils.getLastMillisSeconds());
         keyPrefix.setUnit(TimeUnit.MILLISECONDS);
-        redisCache.hashIncrement(keyPrefix,user.getId()+"",1,sid+"");
+        Long ret = redisCache.hashIncrement(keyPrefix, user.getId() + "", 1, sid + "");
+        if (ret>1){
+            return false;
+        }
         statDataIncr("thumbsupnum",sid);
         return true;
     }
