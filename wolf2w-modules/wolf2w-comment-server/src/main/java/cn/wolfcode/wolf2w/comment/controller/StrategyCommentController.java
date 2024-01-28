@@ -25,7 +25,7 @@ public class StrategyCommentController {
     }
 
     @RequireLogin
-    @PostMapping("/save")
+    @PostMapping("/likes")
     public R<?> likes(String cid){
         strategyCommentService.dolike(cid);
         return R.ok();
