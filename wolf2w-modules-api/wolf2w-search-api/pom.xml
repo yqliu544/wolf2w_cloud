@@ -3,24 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wolf2w_cloud</artifactId>
+        <artifactId>wolf2w-modules-api</artifactId>
         <groupId>cn.wolfcode.wolf2w</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>wolf2w-modules-api</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>wolf2w-users-api</module>
-        <module>wolf2w-article-api</module>
-        <module>wolf2w-comment-api</module>
-        <module>wolf2w-search-api</module>
-    </modules>
+    
+    <artifactId>wolf2w-search-api</artifactId>
+    
     <dependencies>
         <dependency>
-            <groupId>cn.wolfcode.wolf2w</groupId>
-            <artifactId>wolf2w-common-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
     </dependencies>
 

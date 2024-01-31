@@ -16,6 +16,7 @@
         <module>wolf2w-article-server</module>
         <module>wolf2w-data-server</module>
         <module>wolf2w-comment-server</module>
+        <module>wolf2w-search-server</module>
     </modules>
 
     <dependencies>
