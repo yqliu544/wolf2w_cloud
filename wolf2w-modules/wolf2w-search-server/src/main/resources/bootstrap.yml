@@ -7,5 +7,7 @@ spring:
         file-extension: yaml
         namespace: 40c455f1-00b5-4944-8e9d-c9f2ec9efdf0
         server-addr: 127.0.0.1:8848
+        shared-configs:
+          - data-id: redis-dev.yaml
   profiles:
     active: dev
