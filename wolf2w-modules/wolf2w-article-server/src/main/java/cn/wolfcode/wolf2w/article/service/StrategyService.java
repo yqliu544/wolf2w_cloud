@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:
@@ -28,5 +29,11 @@ public interface StrategyService extends IService<Strategy> {
     List<StrategyCondition> findDestCondition(int abroadNo);
 
     List<StrategyCondition> findThemeCondition();
+
+    void viewnumIncr(Long id);
+
+    boolean thumbnumIncr(Long sid);
+
+    Map<String, Object> getStatData(Long id);
 
 }

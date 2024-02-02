@@ -43,7 +43,20 @@ public class StrategyController {
 
     @GetMapping("/detail")
     public R<Strategy> getById(Long id){
+        strategyService.viewnumIncr(id);
         return R.ok(strategyService.getById(id));
+    }
+
+    @GetMapping("/thumbnumIncr")
+    public R<Boolean> thumbnumIncr(Long sid){
+        boolean ret=strategyService.thumbnumIncr(sid);
+        return R.ok(ret);
+    }
+
+    @GetMapping("/stat/data")
+    public R<Map<String,Object>> getStatData(Long id){
+        Map<String,Object> ret=strategyService.getStatData(id);
+        return R.ok(ret);
     }
 
     @GetMapping("/content")
@@ -122,4 +135,6 @@ public class StrategyController {
         result.put("hotRank",hotRank);
         return R.ok(result);
     }
+
+
 }

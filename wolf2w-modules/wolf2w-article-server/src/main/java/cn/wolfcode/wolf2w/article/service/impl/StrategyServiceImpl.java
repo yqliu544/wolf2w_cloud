@@ -1,28 +1,38 @@
 package cn.wolfcode.wolf2w.article.service.impl;
 
 import cn.wolfcode.wolf2w.article.domain.*;
+import cn.wolfcode.wolf2w.article.feign.UserInfoFeignService;
 import cn.wolfcode.wolf2w.article.mapper.StrategyContentMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyThemeMapper;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
+import cn.wolfcode.wolf2w.article.redis.key.StrategyRedisKeyPrefix;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.article.service.StrategyCatalogService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
 import cn.wolfcode.wolf2w.article.service.StrategyThemeService;
 import cn.wolfcode.wolf2w.article.utils.OssUtil;
 import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
+import cn.wolfcode.wolf2w.auth.util.AuthenticationUtils;
+import cn.wolfcode.wolf2w.redis.core.utils.DateUtils;
+import cn.wolfcode.wolf2w.redis.core.utils.R;
+import cn.wolfcode.wolf2w.redis.core.utils.RedisCache;
+import cn.wolfcode.wolf2w.user.vo.LoginUser;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> implements StrategyService {
@@ -34,6 +44,11 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
     private StrategyThemeService strategyThemeService;
     @Autowired
     private StrategyContentMapper strategyContentMapper;
+    @Autowired
+    private RedisCache redisCache;
+    @Lazy
+    @Autowired
+    private UserInfoFeignService userInfoFeignService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -52,6 +67,20 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
         Strategy strategy = super.getById(id);
         StrategyContent content = strategyContentMapper.selectById(id);
         strategy.setContent(content);
+        LoginUser user = AuthenticationUtils.getUser();
+        if (user!=null){
+            R<List<Long>> favoriteStrategyList=userInfoFeignService.getFavorStrategyIdList(user.getId());
+            List<Long> list = favoriteStrategyList.getAndCheck();
+            strategy.setFavorite(list.contains(id));
+        }
+        Map<String, Object> statmap = redisCache.getCacheMap(StrategyRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP.fullKey(id + ""));
+        if (statmap!=null){
+            strategy.setViewnum((Integer) statmap.get("viewnum"));
+            strategy.setReplynum((Integer) statmap.get("replynum"));
+            strategy.setFavornum((Integer) statmap.get("favornum"));
+            strategy.setSharenum((Integer) statmap.get("sharenum"));
+            strategy.setThumbsupnum((Integer) statmap.get("thumbsupnum"));
+        }
         return strategy;
     }
 
@@ -140,5 +169,41 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
     @Override
     public List<StrategyCondition> findThemeCondition() {
         return getBaseMapper().selectThemeCondition();
+    }
+
+    @Override
+    public void viewnumIncr(Long id) {
+        statDataIncr("viewnum",id);
+    }
+
+    @Override
+    public boolean thumbnumIncr(Long sid) {
+        LoginUser user = AuthenticationUtils.getUser();
+        StrategyRedisKeyPrefix keyPrefix = StrategyRedisKeyPrefix.STRATEGIES_TOP_MAP;
+        String fullKey = keyPrefix.fullKey(sid + "");
+//        Integer count = redisCache.getCacheMapValue(fullKey, user.getId() + "");
+//        if (count!=null&&count>0){
+//            return false;
+//        }
+        keyPrefix.setTimeout(DateUtils.getLastMillisSeconds());
+        keyPrefix.setUnit(TimeUnit.MILLISECONDS);
+        Long ret = redisCache.hashIncrement(keyPrefix, user.getId() + "", 1, sid + "");
+        if (ret>1){
+            return false;
+        }
+        statDataIncr("thumbsupnum",sid);
+        return true;
+    }
+
+    @Override
+    public Map<String, Object> getStatData(Long id) {
+
+        return redisCache.getCacheMap(StrategyRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP.fullKey(id+""));
+    }
+
+
+    private void statDataIncr(String hashKey,Long sid){
+        redisCache.hashIncrement(StrategyRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP,hashKey,1,sid+"");
+        redisCache.zsetIncrement(StrategyRedisKeyPrefix.STRATEGIES_STAT_COUNT_RANK_ZSET,1,sid+"");
     }
 }
