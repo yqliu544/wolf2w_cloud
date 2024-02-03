@@ -1,9 +1,7 @@
 package cn.wolfcode.wolf2w.article.controller;
 
-import cn.wolfcode.wolf2w.article.domain.Strategy;
-import cn.wolfcode.wolf2w.article.domain.StrategyCatalog;
-import cn.wolfcode.wolf2w.article.domain.StrategyContent;
-import cn.wolfcode.wolf2w.article.domain.StrategyRank;
+import cn.wolfcode.wolf2w.article.domain.*;
+import cn.wolfcode.wolf2w.article.qo.QueryObject;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.service.StrategyRankService;
 import cn.wolfcode.wolf2w.article.service.StrategyService;
@@ -12,6 +10,7 @@ import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,10 @@ public class StrategyController {
     private StrategyRankService strategyRankService;
 
 
+    @PostMapping("/search")
+    public R<List<Strategy>> searchList(@RequestBody QueryObject queryObject){
+        return R.ok(strategyService.list(new QueryWrapper<Strategy>().last("limit "+queryObject.getOffset()+", "+queryObject.getSize())));
+    }
     @GetMapping("/query")
     public R<Page<Strategy>> pageList(StrategyQuery query){
         Page<Strategy> resultPage = strategyService.pageList(query);

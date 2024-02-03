@@ -6,11 +6,13 @@ import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import cn.wolfcode.wolf2w.user.service.UserInfoService;
 import cn.wolfcode.wolf2w.user.domain.UserInfo;
 import cn.wolfcode.wolf2w.user.vo.RegisterRequest;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -57,5 +59,13 @@ public class UserInfoController {
     public R<Boolean> favoriteStrategy(Long sid){
         boolean ret=userInfoService.favoriteStrategy(sid);
         return  R.ok(ret);
+    }
+
+    @GetMapping
+    public R<List<UserInfoDTO>> findList(Integer current,Integer limit){
+        int offset=(current-1)*limit;
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<UserInfo>().last("limit " + offset + ", " + limit);
+        List<UserInfoDTO> collect = userInfoService.list(wrapper).stream().map(UserInfo::toDto).collect(Collectors.toList());
+        return R.ok(collect);
     }
 }

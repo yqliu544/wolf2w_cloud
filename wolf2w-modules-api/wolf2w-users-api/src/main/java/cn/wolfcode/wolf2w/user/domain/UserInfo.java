@@ -1,6 +1,7 @@
 package cn.wolfcode.wolf2w.user.domain;
 
 
+import cn.wolfcode.wolf2w.user.dto.UserInfoDTO;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -36,17 +37,17 @@ public class UserInfo implements Serializable {
     private String info;  //个性签名
     private Integer state = STATE_NORMAL; //状态
 
-//    public UserInfoDTO toDto() {
-//        UserInfoDTO dto = new UserInfoDTO();
-//        dto.setCity(this.city);
-//        dto.setInfo(this.info);
-//        dto.setEmail(this.email);
-//        dto.setGender(this.gender);
-//        dto.setId(this.id);
-//        dto.setHeadImgUrl(this.headImgUrl);
-//        dto.setLevel(this.level);
-//        dto.setNickname(this.nickname);
-//        dto.setPhone(this.phone);
-//        return dto;
-//    }
+    public UserInfoDTO toDto() {
+        UserInfoDTO dto = new UserInfoDTO();
+        dto.setCity(this.city);
+        dto.setInfo(this.info);
+        dto.setEmail(this.email);
+        dto.setGender(this.gender);
+        dto.setId(this.id);
+        dto.setHeadImgUrl(this.headImgUrl);
+        dto.setLevel(this.level);
+        dto.setNickname(this.nickname);
+        dto.setPhone(this.phone);
+        return dto;
+    }
 }

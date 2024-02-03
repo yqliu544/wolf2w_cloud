@@ -69,7 +69,7 @@ public class R<T> {
     }
 
 
-    public T getAndCheck() {
+    public T checkAndGet() {
         if (code!=CODE_SUCCESS){
             throw new BusinessException(code,msg);
         }

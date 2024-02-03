@@ -1,10 +1,8 @@
 package cn.wolfcode.wolf2w.article.service.impl;
 
-import cn.wolfcode.wolf2w.article.domain.StrategyTheme;
 import cn.wolfcode.wolf2w.article.domain.Travel;
 import cn.wolfcode.wolf2w.article.domain.TravelContent;
 import cn.wolfcode.wolf2w.article.feign.UserInfoFeignService;
-import cn.wolfcode.wolf2w.article.mapper.StrategyThemeMapper;
 import cn.wolfcode.wolf2w.article.mapper.TravelContentMapper;
 import cn.wolfcode.wolf2w.article.mapper.TravelMapper;
 import cn.wolfcode.wolf2w.article.qo.TravelQuery;
@@ -103,7 +101,7 @@ public class TravelServiceImpl extends ServiceImpl<TravelMapper, Travel> impleme
         TravelContent travelContent = travelContentMapper.selectById(id);
         travel.setContent(travelContent);
         R<UserInfoDTO> userInfoDTOR = userInfoFeignService.getById(travel.getAuthorId());
-        UserInfoDTO data = userInfoDTOR.getAndCheck();
+        UserInfoDTO data = userInfoDTOR.checkAndGet();
         travel.setAuthor(data);
         return travel;
     }

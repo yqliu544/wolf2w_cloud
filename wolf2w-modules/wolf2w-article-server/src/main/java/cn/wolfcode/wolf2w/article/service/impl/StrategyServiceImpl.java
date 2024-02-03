@@ -4,7 +4,6 @@ import cn.wolfcode.wolf2w.article.domain.*;
 import cn.wolfcode.wolf2w.article.feign.UserInfoFeignService;
 import cn.wolfcode.wolf2w.article.mapper.StrategyContentMapper;
 import cn.wolfcode.wolf2w.article.mapper.StrategyMapper;
-import cn.wolfcode.wolf2w.article.mapper.StrategyThemeMapper;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.redis.key.StrategyRedisKeyPrefix;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
@@ -70,7 +69,7 @@ public class StrategyServiceImpl extends ServiceImpl<StrategyMapper, Strategy> i
         LoginUser user = AuthenticationUtils.getUser();
         if (user!=null){
             R<List<Long>> favoriteStrategyList=userInfoFeignService.getFavorStrategyIdList(user.getId());
-            List<Long> list = favoriteStrategyList.getAndCheck();
+            List<Long> list = favoriteStrategyList.checkAndGet();
             strategy.setFavorite(list.contains(id));
         }
         Map<String, Object> statmap = redisCache.getCacheMap(StrategyRedisKeyPrefix.STRATEGIES_STAT_DATA_MAP.fullKey(id + ""));

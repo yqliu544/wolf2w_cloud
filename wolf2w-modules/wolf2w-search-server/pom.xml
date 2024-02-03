@@ -25,6 +25,12 @@
             <groupId>cn.wolfcode.wolf2w</groupId>
             <artifactId>wolf2w-users-api</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+        </exclusions>
         </dependency>
         <dependency>
             <groupId>cn.wolfcode.wolf2w</groupId>
@@ -34,6 +40,22 @@
             <groupId>cn.wolfcode.wolf2w</groupId>
             <artifactId>wolf2w-common-redis</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.wolfcode.wolf2w</groupId>
+            <artifactId>wolf2w-article-api</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

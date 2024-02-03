@@ -1,11 +1,14 @@
 package cn.wolfcode.wolf2w.article.controller;
 
 import cn.wolfcode.wolf2w.article.domain.Destination;
+import cn.wolfcode.wolf2w.article.domain.Strategy;
 import cn.wolfcode.wolf2w.article.domain.Travel;
+import cn.wolfcode.wolf2w.article.qo.QueryObject;
 import cn.wolfcode.wolf2w.article.qo.TravelQuery;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.article.service.TravelService;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,10 @@ public class TravelController {
     @Autowired
     private TravelService travelService;
 
+    @PostMapping("/search")
+    public R<List<Travel>> searchList(@RequestBody QueryObject queryObject){
+        return R.ok(travelService.list(new QueryWrapper<Travel>().last("limit "+queryObject.getOffset()+", "+queryObject.getSize())));
+    }
     @GetMapping("/query")
     public R<Page<Travel>> pageList(TravelQuery query){
         Page<Travel> resultPage = travelService.pageList(query);

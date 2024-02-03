@@ -3,9 +3,11 @@ package cn.wolfcode.wolf2w.article.controller;
 import cn.wolfcode.wolf2w.article.domain.Destination;
 import cn.wolfcode.wolf2w.article.domain.Region;
 import cn.wolfcode.wolf2w.article.qo.DestinationQuery;
+import cn.wolfcode.wolf2w.article.qo.QueryObject;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,11 @@ public class DestinationController {
     @GetMapping("/list")
     public R<List<Destination>> listAll(){
         return R.ok(destinationService.list());
+    }
+
+    @PostMapping("/search")
+    public R<List<Destination>> searchList(@RequestBody QueryObject queryObject){
+        return R.ok(destinationService.list(new QueryWrapper<Destination>().last("limit "+queryObject.getOffset()+", "+queryObject.getSize())));
     }
 
 
