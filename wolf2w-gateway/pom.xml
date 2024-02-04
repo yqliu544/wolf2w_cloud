@@ -8,9 +8,9 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    
+
     <artifactId>wolf2w-gateway</artifactId>
-    
+
     <dependencies>
         <!--gateway网关-->
         <dependency>
@@ -38,6 +38,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.wolfcode.wolf2w</groupId>
+            <artifactId>wolf2w-common-core</artifactId>
         </dependency>
     </dependencies>
 

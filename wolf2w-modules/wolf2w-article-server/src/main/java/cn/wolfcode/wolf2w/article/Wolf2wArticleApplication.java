@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @Description:
@@ -12,6 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableFeignClients
+@ComponentScan(basePackages = {"cn.wolfcode.wolf2w.redis","cn.wolfcode.wolf2w.article"})
 @MapperScan("cn.wolfcode.wolf2w.article.mapper")
 public class Wolf2wArticleApplication {
     public static void main(String[] args) {

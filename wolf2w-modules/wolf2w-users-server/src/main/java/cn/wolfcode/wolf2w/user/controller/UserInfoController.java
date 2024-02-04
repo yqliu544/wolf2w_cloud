@@ -7,13 +7,14 @@ import cn.wolfcode.wolf2w.user.service.UserInfoService;
 import cn.wolfcode.wolf2w.user.domain.UserInfo;
 import cn.wolfcode.wolf2w.user.vo.RegisterRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Api(value = "用户模块")
 @RestController
 @RequestMapping("/users")
 public class UserInfoController {
@@ -36,7 +37,15 @@ public class UserInfoController {
         userInfoService.register(registerRequest);
         return R.ok();
     }
-
+    @ApiOperation(value = "登录功能",notes = "基于jwt实现用户登录")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "username",value = "用户名"),
+            @ApiImplicitParam(name = "password",value = "密码")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code=200,message = "登录成功"),
+            @ApiResponse(code=401,message = "用户名或密码错误")
+    })
     @PostMapping("/login")
     public R<Map<String,Object>> login(String username,String password){
         Map<String,Object> map=userInfoService.login(username,password);
