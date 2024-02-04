@@ -1,6 +1,7 @@
 package cn.wolfcode.wolf2w.article.controller;
 
 import cn.wolfcode.wolf2w.article.domain.*;
+import cn.wolfcode.wolf2w.article.dto.StrategyDto;
 import cn.wolfcode.wolf2w.article.qo.QueryObject;
 import cn.wolfcode.wolf2w.article.qo.StrategyQuery;
 import cn.wolfcode.wolf2w.article.service.StrategyRankService;
@@ -9,6 +10,7 @@ import cn.wolfcode.wolf2w.article.utils.OssUtil;
 import cn.wolfcode.wolf2w.article.vo.StrategyCondition;
 import cn.wolfcode.wolf2w.auth.anno.RequireLogin;
 import cn.wolfcode.wolf2w.redis.core.utils.R;
+import cn.wolfcode.wolf2w.user.domain.UserInfo;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -45,7 +47,7 @@ public class StrategyController {
     }
 
     @GetMapping("/detail")
-    public R<Strategy> getById(Long id){
+    public R<Strategy> detail(Long id){
         strategyService.viewnumIncr(id);
         return R.ok(strategyService.getById(id));
     }
@@ -139,5 +141,14 @@ public class StrategyController {
         return R.ok(result);
     }
 
+    @GetMapping("/findByDestName")
+    public R<List<Strategy>> findStrategyByDestName(@RequestParam String destName){
+        return R.ok(strategyService.list(new QueryWrapper<Strategy>().eq("dest_name",destName)));
+    }
+
+    @GetMapping("/getById")
+    public Strategy getById(Long id){
+        return strategyService.getById(id);
+    }
 
 }

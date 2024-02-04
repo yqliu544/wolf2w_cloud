@@ -68,4 +68,9 @@ public class UserInfoController {
         List<UserInfoDTO> collect = userInfoService.list(wrapper).stream().map(UserInfo::toDto).collect(Collectors.toList());
         return R.ok(collect);
     }
+
+    @GetMapping("/findByDestName")
+    public R<List<UserInfo>> findUserByDestName(@RequestParam String destName){
+        return R.ok(userInfoService.list(new QueryWrapper<UserInfo>().eq("city",destName)));
+    }
 }

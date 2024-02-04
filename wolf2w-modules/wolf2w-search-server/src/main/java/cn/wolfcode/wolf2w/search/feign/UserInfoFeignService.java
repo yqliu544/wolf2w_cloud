@@ -12,4 +12,9 @@ import java.util.List;
 public interface UserInfoFeignService {
     @GetMapping("/users")
     R<List<Object>> findList(@RequestParam Integer current,@RequestParam Integer limit);
+
+    @GetMapping("/users/findByDestName")
+    public R<List<UserInfoDTO>> findUserByDestName(@RequestParam String destName);
+    @GetMapping("/users/getById")
+    R<UserInfoDTO> getById(@RequestParam String id);
 }

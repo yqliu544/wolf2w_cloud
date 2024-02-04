@@ -60,4 +60,9 @@ public class TravelController {
         return R.ok();
     }
 
+    @GetMapping("/findByDestName")
+    public R<List<Travel>> findTravelByDestName(@RequestParam String destName){
+        return R.ok(travelService.list(new QueryWrapper<Travel>().eq("dest_name",destName)));
+    }
+
 }

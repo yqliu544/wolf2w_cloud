@@ -2,6 +2,7 @@ package cn.wolfcode.wolf2w.article.controller;
 
 import cn.wolfcode.wolf2w.article.domain.Destination;
 import cn.wolfcode.wolf2w.article.domain.Region;
+import cn.wolfcode.wolf2w.article.dto.DestinationDto;
 import cn.wolfcode.wolf2w.article.qo.DestinationQuery;
 import cn.wolfcode.wolf2w.article.qo.QueryObject;
 import cn.wolfcode.wolf2w.article.service.DestinationService;
@@ -76,5 +77,9 @@ public class DestinationController {
         return R.ok(destinationService.findDestByRid(rid));
     }
 
+    @GetMapping("/getByName")
+    public R<Destination> getDestByName(@RequestParam String name){
+       return R.ok(destinationService.getOne(new QueryWrapper<Destination>().eq("name",name)));
+    }
 
 }
